@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dynamic select</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/fontawesome.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/solid.min.css"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body class="container pt-3">
+
+<form method="post">
+  <div class="mb-3">
+    <label for="dynSel1" class="form-label">Multi-Select element transformed to Dropdown Select</label>
+    <select id="dynSel1" name="dynSel1" class="form-select" multiple>
+      <option value="user1">User 1</option>
+      <optgroup label="Users">
+        <option value="user2">User 2</option>
+      </optgroup>
+      <optgroup label="terminated">
+        <option value="user3">User 3</option>
+        <option value="user4">User 4</option>
+        <option value="user5">User 5</option>
+        <option value="user6">User 6</option>
+        <option value="user7">User 7</option>
+        <option value="user8">User 8</option>
+        <option value="user9">User 9</option>
+        <option value="user10">User 10</option>
+        <option disabled value="user11">User 11</option>
+        <option value="user12">User 12</option>
+      </optgroup>
+    </select></div>
+
+  <div class="mb-3">
+    <label for="dynSel3" class="form-label">Ajax searchable Dropdown Select</label>
+    <select id="dynSel3" name="dynSel3"></select>
+  </div>
+
+  <button class="btn btn-primary mb-3">Submit</button>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="bootstrapDropdownSelect.js"></script>
+
+<script>
+  /**
+   *
+   * @type {BootstrapDropdownSelectOptions}
+   */
+  const options = {
+    placeholder: 'Select User',
+    url: 'https://api.slingacademy.com/v1/sample-data/users',
+    queryParams: (searchQuery, previousParams, previousRequestData) => {
+      const limit = 20;
+      let params = previousParams ? previousParams : new URLSearchParams();
+
+      // add limit to previous offset or set to 0 if no previousParams
+      let offset;
+      if (!previousParams || searchQuery !== previousParams.get('search')) {
+        // set offset to 0 if there was no previous request or if there's a new search query
+        offset = 0;
+      } else {
+        // otherwise, add limit to the previous offset to get this offset
+        offset = parseInt(params.get('offset')) + limit
+      }
+
+      params.set('offset', offset);
+      params.set('limit', limit);
+
+      if (!searchQuery || searchQuery.trim().length === 0) {
+        params.delete('search');
+      } else {
+        params.set('search', searchQuery);
+      }
+
+      return params;
+    },
+    processData: (data, reqParams) => {
+      const processed = data.users.map(u => {
+        return {
+          value: u.id,
+          label: `${u.first_name} ${u.last_name}`,
+          htmlLabel: `<div class="fw-bold">${u.first_name} ${u.last_name}</div><div class="text-secondary">${u.city}, ${u.country}</div>`
+        };
+      });
+
+      return {
+        data: processed,
+        hasMore: data.offset < 50,
+        // hasMore: data.offset + data.limit < data.total_users,
+        optGroup: `Page ${data.offset / data.limit + 1}`
+      };
+    }
+  };
+
+  const dropdown = new BootstrapDropdownSelect(document.getElementById('dynSel1'), {placeholder: 'Search User'});
+  const dropdown2 = new BootstrapDropdownSelect(document.getElementById('dynSel3'), options);
+</script>
+</body>
+</html>
