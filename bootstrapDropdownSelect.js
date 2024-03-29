@@ -2,7 +2,7 @@
  * @typedef {Object} OptionItemChild
  * @property {string} label - The text content displayed to user.
  * @property {string?} htmlLabel - HTML content rendered in the dropdown.
- * @property {string?} value - The value that is sent through the form data. Leave undefined if an optgroup.
+ * @property {string} value - The value that is sent through the form data. Leave undefined if an optgroup.
  * @property {boolean?} disabled - Disables the option. Leave undefined if an optgroup.
  */
 
@@ -487,10 +487,7 @@ class BootstrapDropdownSelect {
   }
 
   clearSelection() {
-    for (const o of this.src.options) {
-      o.selected = false;
-    }
-
+    this.src.value = '';
     this.input.value = '';
   }
 

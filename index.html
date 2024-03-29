@@ -14,8 +14,8 @@
 <div class="row justify-content-center">
   <form method="post" class="col-md-6">
     <div class="mb-3">
-      <label for="dynSel1" class="form-label">Multi-Select element transformed to Dropdown Select</label>
-      <select id="dynSel1" name="dynSel1" class="form-select" multiple>
+      <label for="ddSel1" class="form-label">Multi-Select element transformed to Dropdown Select</label>
+      <select id="ddSel1" name="users_1" class="form-select" multiple>
         <option value="user1">User 1</option>
         <optgroup label="Users">
           <option value="user2">User 2</option>
@@ -35,8 +35,8 @@
       </select></div>
 
     <div class="mb-3">
-      <label for="dynSel3" class="form-label">Ajax searchable Dropdown Select</label>
-      <select id="dynSel3" name="dynSel3"></select>
+      <label for="ddSel2" class="form-label">Ajax searchable Dropdown Select</label>
+      <select id="ddSel2" name="users_2"></select>
     </div>
 
     <button class="btn btn-primary mb-3">Submit</button>
@@ -97,8 +97,8 @@
     }
   };
 
-  const dropdown = new BootstrapDropdownSelect(document.getElementById('dynSel1'), {placeholder: 'Search User'});
-  const dropdown2 = new BootstrapDropdownSelect(document.getElementById('dynSel3'), options);
+  const dropdown = new BootstrapDropdownSelect(document.getElementById('ddSel1'), {placeholder: 'Search User'});
+  const dropdown2 = new BootstrapDropdownSelect(document.getElementById('ddSel2'), options);
 </script>
 </body>
 </html>
