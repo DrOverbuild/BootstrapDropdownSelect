@@ -23,7 +23,7 @@ View the [Live example](https://droverbuild.github.io/BootstrapDropdownSelect/).
 Add the [CSS file](index.css) to the HTML head after the Bootstrap and FontAwesome CSS links. Add 
 [bootstrapDropdownSelect.js](bootstrapDropdownSelect.js) at the end of the body element after the Bootstrap JS.
 
-### AJAX Select
+### Data Source: AJAX
 In your HTML, add an empty &lt;select&gt; element. Any accompanying labels will automatically be reassigned to the 
 search input element that is rendered when building the dropdown. 
 
@@ -88,6 +88,41 @@ const dropdown2 = new BootstrapDropdownSelect(document.getElementById('ddSel'), 
 
 The first parameter of the constructor should be the &lt;select&gt; element that will be transformed into a dropdown.
 This is the source element, and will be hidden during construction of the dropdown.
+
+### Data Source: &lt;select&gt;
+
+Render your options as usual in a &lt;select&gt; element:
+
+```html
+<div class="mb-3">
+  <label for="ddSel1" class="form-label">Multi-Select element transformed to Dropdown Select</label>
+  <select id="ddSel1" name="users_1" class="form-select" multiple>
+    <option value="user1">User 1</option>
+    <optgroup label="Users">
+      <option value="user2">User 2</option>
+    </optgroup>
+    <optgroup label="terminated">
+      <option value="user3">User 3</option>
+      <option value="user4">User 4</option>
+      <option value="user5">User 5</option>
+      <option value="user6">User 6</option>
+      <option value="user7">User 7</option>
+      <option value="user8">User 8</option>
+      <option value="user9">User 9</option>
+      <option value="user10">User 10</option>
+      <option disabled value="user11">User 11</option>
+      <option value="user12">User 12</option>
+    </optgroup>
+  </select>
+</div>
+```
+
+After [bootstrapDropdownSelect.js](bootstrapDropdownSelect.js) is loaded in, construct a new BootstrapDropdownSelect
+object and pass in the proper options. 
+
+```js
+const dropdown = new BootstrapDropdownSelect(document.getElementById('ddSel1'), {placeholder: 'Search User'});
+```
 
 ## Options
 
