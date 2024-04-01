@@ -9,7 +9,7 @@ View the [Live example](https://droverbuild.github.io/BootstrapDropdownSelect/).
 - Search is debounced before making AJAX request
 - Process data retrieved from AJAX call before it is rendered into the dropdown 
 - Supports disabled options and optgroup
-- Natural Keyboard navigation and accessibility
+- Natural keyboard navigation and accessibility
 - Works perfectly with forms
 - Customize what is rendered for each option
 - Add options to existing or new option groups if needed. 
@@ -88,6 +88,15 @@ const dropdown2 = new BootstrapDropdownSelect(document.getElementById('ddSel'), 
 
 The first parameter of the constructor should be the &lt;select&gt; element that will be transformed into a dropdown.
 This is the source element, and will be hidden during construction of the dropdown.
+
+A dropdown with an option already selected upon initialization can be rendered by adding an option into the source 
+&lt;select&gt; element as follows:
+
+```html
+<select id="ddSel" name="users">
+  <option value="3">Brittany Bradford</option> <!-- Will become the selected option upon initialization -->
+</select>
+```
 
 ### Data Source: &lt;select&gt;
 
