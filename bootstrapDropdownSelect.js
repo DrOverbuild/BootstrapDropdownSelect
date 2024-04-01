@@ -167,6 +167,12 @@ class BootstrapDropdownSelect {
     el.classList.add('bsddsel-group-option');
     el.dataset.label = option.label;
     el.dataset.value = option.value;
+
+    const selectedOption = Array.from(this.src.selectedOptions).find(s => s.value === option.value);
+    if (selectedOption) {
+      el.classList.add('selected');
+    }
+
     if (option.htmlLabel) {
       el.innerHTML = option.htmlLabel;
     } else {
@@ -249,12 +255,57 @@ class BootstrapDropdownSelect {
   }
 
   /**
-   * Renders the dropdown from the data source.
+   * Renders the dropdown from the select element. Only called when the source is the select element, not AJAX.
+   * @param {string?} searchQuery - renders items in the dropdown if the search query is defined.
    */
-  renderOptions() {
-    for (const option of this.data) {
+  renderOptions(searchQuery) {
+    this.dropdown.innerHTML = '';
+    let filteredData = this.data;
+
+    if (searchQuery && searchQuery.trim().length > 0) {
+      filteredData = this.filterData(searchQuery);
+    }
+
+    for (const option of filteredData) {
       this.dropdown.appendChild(option.children ? this.renderOptionGroup(option) : this.renderSingleOption(option));
     }
+  }
+
+  /**
+   *
+   * @param {string} searchQuery
+   * @returns {OptionItem[]}
+   */
+  filterData(searchQuery) {
+    const queryNormalized = searchQuery.toLowerCase().trim();
+    /**
+     * @type {OptionItem[]}
+     */
+    let filtered = [];
+    for (const item of this.data) {
+      if (!item.children) {
+        if (item.label.toLowerCase().includes(queryNormalized)) {
+          filtered.push(item);
+        }
+        continue;
+      }
+
+      /**
+       * @type {OptionItemChild[]}
+       */
+      let filteredChildren = [];
+      for (const child of item.children) {
+        if (child.label.toLowerCase().includes(queryNormalized)) {
+          filteredChildren.push(child);
+        }
+      }
+
+      if (filteredChildren.length > 0) {
+        filtered.push({...item, children: filteredChildren});
+      }
+    }
+
+    return filtered;
   }
 
   debouncedSearchQueryChanged(s) {
@@ -470,6 +521,13 @@ class BootstrapDropdownSelect {
       this.input.insertAdjacentElement('beforebegin', tag);
       this.input.placeholder = '';
       selectedOption.selected = true;
+
+      // clearing search field
+      if (this.input.value.length > 0) {
+        this.input.value = ''
+        this.input.focus();
+        this.renderOptions();
+      }
     }
   }
 
@@ -512,6 +570,7 @@ class BootstrapDropdownSelect {
   selectGroupOptionKeyDownHandler(e) {
     if (e.key === 'Enter') {
       this.makeSelection(e.target);
+      e.preventDefault();
     } else if (e.key === 'ArrowDown') {
       e.preventDefault();
       this.focusNextOption();
@@ -574,8 +633,8 @@ class BootstrapDropdownSelect {
     });
     this.input.addEventListener('input', function (e) {
       if (!that.options.url) {
-        // todo implement search with local options
-        return;
+        // render local search
+        that.renderOptions(that.input.value);
       }
       if (that.debounceTimer) {
         clearTimeout(that.debounceTimer);
