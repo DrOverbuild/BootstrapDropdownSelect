@@ -399,6 +399,9 @@ class BootstrapDropdownSelect {
     this.openDropdown();
 
     const selectChoices = Array.from(this.trg.querySelectorAll('.bsddsel-group-option:not([disabled])'));
+
+    if (selectChoices.length === 0) return;
+
     const active = document.activeElement;
     let nextIdx;
     if (active && selectChoices.includes(active)) {
