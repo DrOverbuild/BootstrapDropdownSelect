@@ -639,6 +639,14 @@ class BootstrapDropdownSelect {
         // render local search
         that.renderOptions(that.input.value);
       }
+
+      if (that.multiple) {
+        return;
+      }
+
+      // clear selection on search change
+      that.src.value = '';
+
       if (that.debounceTimer) {
         clearTimeout(that.debounceTimer);
       }
