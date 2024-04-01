@@ -70,7 +70,7 @@ const options = {
   processData: (data, reqParams) => {
     const processed = data.users.map(u => {
       return {
-        value: u.id,
+        value: `${u.id}`, // important to convert this value to string or value identification will not work
         label: `${u.first_name} ${u.last_name}`,
         htmlLabel: `<div class="fw-bold">${u.first_name} ${u.last_name}</div><div class="text-secondary">${u.city}, ${u.country}</div>`
       };
@@ -200,9 +200,9 @@ existing option group.
 | `optGroup` | `string`  | No       | If this is set, the options in `data` will be rendered under this given option group. If it doesn't exist, a new option group is created with this value as the label. |
 
 #### Properties of `data`
-| Name        | Type      | Required | Description                                                                                                                                                                                            |
-|-------------|-----------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `label`     | `string`  | Yes      | Display label of the option. Rendered in the dropdown and in the search box and multi-select tags when selected.                                                                                       |
-| `htmlLabel` | `string`  | No       | If this is set, the dropdown renders this as HTML for each option. The value of `label` will still be used in the search box when the option is checked. **Note**: Not supported for DOM data sources. |
-| `value`     | `string`  | Yes      | The value of the option that is submitted through FormData.                                                                                                                                            |
-| `disabled`  | `boolean` | No       | Whether or not the option is disabled.                                                                                                                                                                 |
+| Name        | Type      | Required | Description                                                                                                                                                                                                 |
+|-------------|-----------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `label`     | `string`  | Yes      | Display label of the option. Rendered in the dropdown and in the search box and multi-select tags when selected.                                                                                            |
+| `htmlLabel` | `string`  | No       | If this is set, the dropdown renders this as HTML for each option. The value of `label` will still be used in the search box when the option is checked. **Note**: Not supported for DOM data sources.      |
+| `value`     | `string`  | Yes      | The value of the option that is submitted through FormData. It is important to convert this value to string (if, for instance, your identifier is a number). Otherwise, value identification will not work. |
+| `disabled`  | `boolean` | No       | Whether or not the option is disabled.                                                                                                                                                                      |

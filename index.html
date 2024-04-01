@@ -38,7 +38,9 @@
 
     <div class="mb-3">
       <label for="ddSel2" class="form-label">Ajax searchable Dropdown Select</label>
-      <select id="ddSel2" name="users_2"></select>
+      <select id="ddSel2" name="users_2">
+        <option value="3">Brittany Bradford</option>
+      </select>
     </div>
 
     <button class="btn btn-primary mb-3">Submit</button>
@@ -86,7 +88,7 @@
     processData: (data, reqParams) => {
       const processed = data.users.map(u => {
         return {
-          value: u.id,
+          value: `${u.id}`,
           label: `${u.first_name} ${u.last_name}`,
           htmlLabel: `<div class="fw-bold">${u.first_name} ${u.last_name}</div><div class="text-secondary">${u.city}, ${u.country}</div>`
         };

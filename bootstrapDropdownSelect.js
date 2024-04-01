@@ -111,8 +111,10 @@ class BootstrapDropdownSelect {
       // if no url provided, our data source is the options from the <select> tag
       this.loadDataFromSrc();
       this.renderOptions();
-      this.loadSelectedOptionFromSrc();
     }
+
+
+    this.loadSelectedOptionFromSrc();
 
     this.src.insertAdjacentElement('afterend', this.trg);
     this.src.style.display = 'none';
@@ -213,10 +215,9 @@ class BootstrapDropdownSelect {
   }
 
   /**
-   *
+   * Constructs a new multiselect tag element and adds it to the DOM before the search input element.
    * @param {string} label
    * @param {string} value
-   * @returns {HTMLSpanElement}
    */
   renderMultiselectTag(label, value) {
     const el = document.createElement('span');
@@ -224,7 +225,8 @@ class BootstrapDropdownSelect {
     el.dataset.value = value;
     el.tabIndex = -1;
     el.innerHTML = `<span class="fa-solid fa-xmark"></span>${label}`;
-    return el;
+    this.input.insertAdjacentElement('beforebegin', el);
+    this.input.placeholder = '';
   }
 
   /**
@@ -438,13 +440,13 @@ class BootstrapDropdownSelect {
     const children = Array.from(this.src.children);
     for (let child of children) {
       if (child.tagName === 'OPTION') {
-        data.push({value: child.value, label: child.innerText, disabled: !!child.disabled});
+        data.push({value: child.value, label: child.label, disabled: !!child.disabled});
       } else if (child.tagName === 'OPTGROUP') {
         const children = [];
         for (const optGroupChild of Array.from(child.children)) {
           children.push({
             value: optGroupChild.value,
-            label: optGroupChild.innerText,
+            label: optGroupChild.label,
             disabled: !!optGroupChild.disabled
           });
         }
@@ -455,10 +457,21 @@ class BootstrapDropdownSelect {
     this.data = data;
   }
 
+  /**
+   * If the <select> element has an option already selected when this dropdown is initialized, this will place the label
+   * of the selected option into the search input to indicate the selected option.
+   */
   loadSelectedOptionFromSrc() {
-    const selected = this.src.querySelector('option[selected]');
+    const allSelected = Array.from(this.src.selectedOptions);
+    if (this.multiple) {
+      for (const option of allSelected) {
+        this.renderMultiselectTag(option.label , option.value)
+      }
+      return;
+    }
+    const selected = Array.from(this.src.selectedOptions).find(o => o.selected);
     if (selected) {
-      this.input.value = selected.innerText;
+      this.input.value = selected.label;
     }
   }
 
@@ -483,12 +496,12 @@ class BootstrapDropdownSelect {
       // implies our data comes from src itself so src should definitely have it and there's no need to add the option
       const option = document.createElement('option');
       option.value = value;
-      option.innerText = label;
+      option.label = label;
       this.src.appendChild(option);
     }
 
     if (this.multiple) {
-      this.toggleSelectedItem(selectGroupOption);
+      this.toggleMultiselectOption(selectGroupOption);
     } else {
       this.input.value = label;
       this.src.value = value;
@@ -506,7 +519,7 @@ class BootstrapDropdownSelect {
    * loses the selected class
    * @param {HTMLDivElement} selectGroupOption
    */
-  toggleSelectedItem(selectGroupOption) {
+  toggleMultiselectOption(selectGroupOption) {
     const value = selectGroupOption.dataset.value;
     const label = selectGroupOption.dataset.label;
     const options = Array.from(this.src.options);
@@ -520,9 +533,7 @@ class BootstrapDropdownSelect {
     } else {
       // selecting item
       selectGroupOption.classList.add('selected');
-      const tag = this.renderMultiselectTag(label, value);
-      this.input.insertAdjacentElement('beforebegin', tag);
-      this.input.placeholder = '';
+      this.renderMultiselectTag(label, value);
       selectedOption.selected = true;
 
       // clearing search field
@@ -538,7 +549,7 @@ class BootstrapDropdownSelect {
    *
    * @param {string} value
    */
-  deselectItem(value) {
+  deselectMultiselectOption(value) {
     const allOptions = Array.from(this.src.options);
     const targetOption = allOptions.find(o => o.value === value);
     if (targetOption) targetOption.selected = false;
@@ -625,7 +636,7 @@ class BootstrapDropdownSelect {
 
     if (e.target.matches('.multiselect-tag .fa-xmark')) {
       const value = e.target.closest('.multiselect-tag').dataset.value;
-      this.deselectItem(value);
+      this.deselectMultiselectOption(value);
     }
   }
 
@@ -671,7 +682,7 @@ class BootstrapDropdownSelect {
           const allTags = Array.from(that.trg.querySelectorAll('.multiselect-tag'));
           if (allTags.length > 0) {
             const lastVal = allTags[allTags.length - 1].dataset.value;
-            that.deselectItem(lastVal);
+            that.deselectMultiselectOption(lastVal);
           }
         }
       }
