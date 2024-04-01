@@ -558,6 +558,14 @@ class BootstrapDropdownSelect {
     if (this.src.selectedOptions.length === 0) this.input.placeholder = this.options.placeholder;
   }
 
+  deselectLastMultiselectOption() {
+    const allTags = Array.from(this.trg.querySelectorAll('.multiselect-tag'));
+    if (allTags.length > 0) {
+      const lastVal = allTags[allTags.length - 1].dataset.value;
+      this.deselectMultiselectOption(lastVal);
+    }
+  }
+
   clearSelection() {
     this.src.value = '';
     this.input.value = '';
@@ -594,9 +602,13 @@ class BootstrapDropdownSelect {
     } else if (e.key === 'Escape') {
       e.target.blur();
     } else if (e.keyCode >= 65 && e.keyCode <= 90) {
-      // typing activates the search bar
+      // typing activates the search bar and the character that is pressed is sent to the input
       this.input.focus();
-      this.input.dispatchEvent(e);
+    } else  if (e.key === 'Backspace') {
+      this.input.focus();
+      if (!this.input.value || this.input.value.length === 0) {
+        this.deselectLastMultiselectOption();
+      }
     }
   }
 
@@ -679,11 +691,7 @@ class BootstrapDropdownSelect {
         // delete selected item if multiple are supported
         const val = e.currentTarget.value;
         if (!val || val.length === 0) {
-          const allTags = Array.from(that.trg.querySelectorAll('.multiselect-tag'));
-          if (allTags.length > 0) {
-            const lastVal = allTags[allTags.length - 1].dataset.value;
-            that.deselectMultiselectOption(lastVal);
-          }
+          that.deselectLastMultiselectOption();
         }
       }
     });
