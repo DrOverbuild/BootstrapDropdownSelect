@@ -465,7 +465,7 @@ class BootstrapDropdownSelect {
     const allSelected = Array.from(this.src.selectedOptions);
     if (this.multiple) {
       for (const option of allSelected) {
-        this.renderMultiselectTag(option.label , option.value)
+        this.renderMultiselectTag(option.label, option.value);
       }
       return;
     }
@@ -509,6 +509,7 @@ class BootstrapDropdownSelect {
 
       this.dropdown.querySelector('.bsddsel-group-option.selected')?.classList.remove('selected');
       selectGroupOption.classList.add('selected');
+      this.src.dispatchEvent(new Event('input', {bubbles: true}));
     }
   }
 
@@ -538,11 +539,12 @@ class BootstrapDropdownSelect {
 
       // clearing search field
       if (this.input.value.length > 0) {
-        this.input.value = ''
+        this.input.value = '';
         this.input.focus();
         this.renderOptions();
       }
     }
+    this.src.dispatchEvent(new Event('input', {bubbles: true}));
   }
 
   /**
@@ -556,6 +558,7 @@ class BootstrapDropdownSelect {
     this.trg.querySelector(`.multiselect-tag[data-value='${value}']`)?.remove();
     this.trg.querySelector(`.bsddsel-group-option[data-value='${value}']`)?.classList.remove('selected');
     if (this.src.selectedOptions.length === 0) this.input.placeholder = this.options.placeholder;
+    this.src.dispatchEvent(new Event('input', {bubbles: true}));
   }
 
   deselectLastMultiselectOption() {
@@ -567,7 +570,10 @@ class BootstrapDropdownSelect {
   }
 
   clearSelection() {
-    this.src.value = '';
+    if (this.src.value !== '') {
+      this.src.value = '';
+      this.src.dispatchEvent(new Event('input', {bubbles: true}));
+    }
     this.input.value = '';
   }
 
@@ -604,7 +610,7 @@ class BootstrapDropdownSelect {
     } else if (e.keyCode >= 65 && e.keyCode <= 90) {
       // typing activates the search bar and the character that is pressed is sent to the input
       this.input.focus();
-    } else  if (e.key === 'Backspace') {
+    } else if (e.key === 'Backspace') {
       this.input.focus();
       if (!this.input.value || this.input.value.length === 0) {
         this.deselectLastMultiselectOption();
