@@ -149,7 +149,7 @@ class BootstrapDropdownSelect {
     el.classList.add('bsddsel-form-group');
     if (!isMultiple) el.classList.add('single-select');
     el.innerHTML = `<div class="form-control">
-        <input type="text" class="bsddsel-input" placeholder="${placeholder}" autocomplete="off">
+        <input type="text" class="bsddsel-input" placeholder="${placeholder}" autocomplete="off" autocorrect="off">
         <span class="fa-solid fa-xmark form-control-clear" title="Clear current selection"></span>
         <span class="bsddsel-dropdown-indicator fa-solid fa-chevron-down" tabindex="-1"></span>
         <span class="bsddsel-dropdown-indicator fa-solid fa-magnifying-glass" tabindex="-1"></span>
