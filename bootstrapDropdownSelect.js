@@ -379,7 +379,7 @@ class BootstrapDropdownSelect {
   }
 
   dropdownIsOpen() {
-    return this.trg.hasClass('dropdown-open');
+    return this.trg.classList.contains('dropdown-open');
   }
 
   focusNextOption() {
@@ -505,6 +505,7 @@ class BootstrapDropdownSelect {
     } else {
       this.input.value = label;
       this.src.value = value;
+      this.input.focus();
       this.closeDropdown();
 
       this.dropdown.querySelector('.bsddsel-group-option.selected')?.classList.remove('selected');
@@ -623,16 +624,16 @@ class BootstrapDropdownSelect {
    * @param {PointerEvent} e
    */
   trgClickHandler(e) {
-    if (e.target.classList.contains('form-control')) {
+    if (e.target.classList.contains('form-control') || e.target === this.input) {
       this.input.focus();
+      if (!this.dropdownIsOpen()) this.openDropdown();
       return;
     }
 
-    if (e.target.classList.contains('form-control-dropdown-indicator')) {
-      if (this.dropdownIsOpen()) {
-        this.closeDropdown(); // input is already blurred at this point
-      } else {
-        this.input.focus();
+    if (e.target.classList.contains('bsddsel-dropdown-indicator')) {
+      this.input.focus();
+      if (!this.dropdownIsOpen()) {
+        this.openDropdown();
       }
       return;
     }
@@ -664,6 +665,10 @@ class BootstrapDropdownSelect {
       that.openDropdown();
     });
     this.input.addEventListener('input', function (e) {
+      if (!that.dropdownIsOpen()) {
+        that.openDropdown();
+      }
+
       if (!that.options.url) {
         // render local search
         that.renderOptions(that.input.value);
@@ -690,7 +695,11 @@ class BootstrapDropdownSelect {
         e.preventDefault();
         that.focusPreviousOption();
       } else if (e.key === 'Enter') {
-        e.preventDefault();
+        const open = that.dropdownIsOpen();
+        if (open) {
+          that.closeDropdown();
+          e.preventDefault();
+        }
       } else if (e.key === 'Escape') {
         e.currentTarget.blur();
       } else if (e.key === 'Backspace' && that.multiple) {
