@@ -644,6 +644,8 @@ class BootstrapDropdownSelect {
       this.input.focus();
       if (this.options.url) {
         this.debouncedSearchQueryChanged(null);
+      } else {
+        this.renderOptions('');
       }
       return;
     }
@@ -681,6 +683,10 @@ class BootstrapDropdownSelect {
 
       // clear selection on search change
       that.src.value = '';
+
+      if (!that.options.url) {
+        return;
+      }
 
       if (that.debounceTimer) {
         clearTimeout(that.debounceTimer);
