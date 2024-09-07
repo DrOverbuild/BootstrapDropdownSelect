@@ -133,6 +133,62 @@ object and pass in the proper options.
 const dropdown = new BootstrapDropdownSelect(document.getElementById('ddSel1'), {placeholder: 'Search User'});
 ```
 
+### Validation
+Bootstrap validation is supported, both with the `:invalid` and `:valid` tags in a form with `.was-validated` and with
+the manual `.is-invalid` and `.is-valid` classes. 
+
+The live demo uses code from Bootstrap's 
+[form validation documentation](https://getbootstrap.com/docs/5.3/forms/validation/), adding `novaldiate` to the form
+element and adding `.was-validated` to the form's class list. The `required` attribute was added to the first two select
+elements in the HTML source. If the submit button is clicked and they are left empty, the dropdown will present in an
+invalid state with the invalid feedback message below. 
+
+Validation can be done without the built-in browser validation or server-side using the `.is-invalid` and `.is-valid`
+classes. Add these classes to the source element (the `<select>` element) during server-side rendering or in JavaScript.
+Even after the dropdown has been built and rendered, add the validation class to the source element, and the rendered
+result will present the proper validation state.
+
+```html
+<!-- Built-in browser validation. This will render in the invalid state -->
+<form novalidate class="was-validated">
+  <div class="mb-3">
+    <label for="ddSel" class="form-label">User</label>
+    <select id="ddSel" name="user" required>
+      <option value="" disabled selected>Choose...</optiohn>
+      <option value="value">...</option>
+    </select>
+    <div class="invalid-feedback">
+      Please choose a user.
+    </div>
+  </div>
+</form>
+<script>
+  const dropdown = new BootstrapDropdownSelect(document.getElementById('ddSel'), {placeholder: 'Search User'});
+</script>
+```
+
+```html
+<!-- Manual JavaScript validation. This will render in the invalid state after invalidate() is called below. -->
+<div class="mb-3">
+  <label for="ddSel" class="form-label">User</label>
+  <select id="ddSel" name="user" required>
+    <option value="" disabled selected>Choose...</optiohn>
+    <option value="value">...</option>
+  </select>
+  <div class="invalid-feedback">
+    Please choose a user.
+  </div>
+</div>
+<script>
+  const ddSel = document.getElementById('ddSel');
+  const dropdown = new BootstrapDropdownSelect(ddSel, {placeholder: 'Search User'});
+
+  function invalidate() {
+    ddSel.classList.add('is-invalid');
+  }
+</script>
+```
+
 ## Options
 
 ### `options.placeholder`

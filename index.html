@@ -17,10 +17,13 @@
 <body class="container pt-3">
 
 <div class="row justify-content-center">
-  <form method="post" class="col-md-6">
+  <form method="post" class="col-md-6" novalidate>
     <div class="mb-3">
-      <label for="ddSel1" class="form-label">Single select element transformed to Dropdown Select</label>
-      <select id="ddSel1" name="users_1" class="form-select">
+      <label for="ddSel1" class="form-label">
+        Single select element transformed to Dropdown Select (required, invalidates on submit if empty)
+      </label>
+      <select id="ddSel1" name="users_1" class="form-select" required>
+        <option value="" disabled selected>Choose...</optiohn>
         <option value="user1">User 1</option>
         <optgroup label="Users">
           <option value="user2">User 2</option>
@@ -38,11 +41,16 @@
           <option value="user12">User 12</option>
         </optgroup>
       </select>
+      <div class="invalid-feedback">
+        Please choose a user.
+      </div>
     </div>
 
     <div class="mb-3">
-      <label for="ddSel2" class="form-label">Multi-Select element transformed to Dropdown Select</label>
-      <select id="ddSel2" name="users_1" class="form-select" multiple>
+      <label for="ddSel2" class="form-label">
+        Multi-Select element transformed to Dropdown Select (required, invalidates on submit if empty)
+      </label>
+      <select id="ddSel2" name="users_1" class="form-select" multiple required>
         <option value="user1">User 1</option>
         <optgroup label="Users">
           <option value="user2">User 2</option>
@@ -69,7 +77,10 @@
       </select>
     </div>
 
-    <button class="btn btn-primary mb-3">Submit</button>
+    <div class="d-flex justify-content-center mb-3 gap-3">
+      <button class="btn btn-primary" type="submit">Submit</button>      
+    </div>
+
   </form>
 </div>
 
@@ -132,6 +143,14 @@
   const dropdown1 = new BootstrapDropdownSelect(document.getElementById('ddSel1'), {placeholder: 'Search User'});
   const dropdown2 = new BootstrapDropdownSelect(document.getElementById('ddSel2'), {placeholder: 'Search User'});
   const dropdown3 = new BootstrapDropdownSelect(document.getElementById('ddSel3'), options);
+
+  // demonstrate form validation with demo code from Bootstrap documentation
+  const form = document.querySelector('form');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    form.classList.add('was-validated');
+  });
 </script>
 </body>
 </html>
