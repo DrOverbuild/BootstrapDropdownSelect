@@ -576,6 +576,7 @@ class BootstrapDropdownSelect {
       this.src.dispatchEvent(new Event('input', {bubbles: true}));
     }
     this.input.value = '';
+    this.dropdown.querySelector('.bsddsel-group-option.selected')?.classList.remove('selected');
   }
 
   // Event handlers

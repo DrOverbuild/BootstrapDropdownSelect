@@ -19,8 +19,8 @@
 <div class="row justify-content-center">
   <form method="post" class="col-md-6">
     <div class="mb-3">
-      <label for="ddSel1" class="form-label">Multi-Select element transformed to Dropdown Select</label>
-      <select id="ddSel1" name="users_1" class="form-select" multiple>
+      <label for="ddSel1" class="form-label">Single select element transformed to Dropdown Select</label>
+      <select id="ddSel1" name="users_1" class="form-select">
         <option value="user1">User 1</option>
         <optgroup label="Users">
           <option value="user2">User 2</option>
@@ -41,8 +41,30 @@
     </div>
 
     <div class="mb-3">
-      <label for="ddSel2" class="form-label">Ajax searchable Dropdown Select</label>
-      <select id="ddSel2" name="users_2">
+      <label for="ddSel2" class="form-label">Multi-Select element transformed to Dropdown Select</label>
+      <select id="ddSel2" name="users_1" class="form-select" multiple>
+        <option value="user1">User 1</option>
+        <optgroup label="Users">
+          <option value="user2">User 2</option>
+        </optgroup>
+        <optgroup label="terminated">
+          <option value="user3">User 3</option>
+          <option value="user4">User 4</option>
+          <option value="user5">User 5</option>
+          <option value="user6">User 6</option>
+          <option value="user7">User 7</option>
+          <option value="user8">User 8</option>
+          <option value="user9">User 9</option>
+          <option value="user10">User 10</option>
+          <option disabled value="user11">User 11</option>
+          <option value="user12">User 12</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="ddSel3" class="form-label">Ajax searchable Dropdown Select</label>
+      <select id="ddSel3" name="users_2">
         <option value="3">Brittany Bradford</option>
       </select>
     </div>
@@ -107,8 +129,9 @@
     }
   };
 
-  const dropdown = new BootstrapDropdownSelect(document.getElementById('ddSel1'), {placeholder: 'Search User'});
-  const dropdown2 = new BootstrapDropdownSelect(document.getElementById('ddSel2'), options);
+  const dropdown1 = new BootstrapDropdownSelect(document.getElementById('ddSel1'), {placeholder: 'Search User'});
+  const dropdown2 = new BootstrapDropdownSelect(document.getElementById('ddSel2'), {placeholder: 'Search User'});
+  const dropdown3 = new BootstrapDropdownSelect(document.getElementById('ddSel3'), options);
 </script>
 </body>
 </html>
