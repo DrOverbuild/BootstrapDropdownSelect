@@ -78,7 +78,36 @@
     </div>
 
     <div class="d-flex justify-content-center mb-3 gap-3">
+      <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Open Modal</button>
       <button class="btn btn-primary" type="submit">Submit</button>      
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="ddSel4" class="form-label">Select in Modal</label>
+              <select id="ddSel4">
+                <option value="1">Brittany Bradford</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Close
+            </button>
+            <button type="button" class="btn btn-primary">
+              Save changes
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
   </form>
@@ -143,6 +172,7 @@
   const dropdown1 = new BootstrapDropdownSelect(document.getElementById('ddSel1'), {placeholder: 'Search User'});
   const dropdown2 = new BootstrapDropdownSelect(document.getElementById('ddSel2'), {placeholder: 'Search User'});
   const dropdown3 = new BootstrapDropdownSelect(document.getElementById('ddSel3'), options);
+  const dropdown4 = new BootstrapDropdownSelect(document.getElementById('ddSel4'), {placeholder: 'Search User'});
 
   // demonstrate form validation with demo code from Bootstrap documentation
   const form = document.querySelector('form');

@@ -608,7 +608,7 @@ class BootstrapDropdownSelect {
       e.preventDefault();
       this.focusPreviousOption();
     } else if (e.key === 'Escape') {
-      e.target.blur();
+      this.escapePressedHandler(e);
     } else if (e.keyCode >= 65 && e.keyCode <= 90) {
       // typing activates the search bar and the character that is pressed is sent to the input
       this.input.focus();
@@ -618,6 +618,21 @@ class BootstrapDropdownSelect {
         this.deselectLastMultiselectOption();
       }
     }
+  }
+
+  /**
+   * called when Escape is pressed in the input or one of the options
+   * @param {KeyboardEvent} e 
+   */
+  escapePressedHandler(e) {
+    // if the dropdown is inside a modal, we need to focus the modal so that the next 'Escape' keydown hides the modal
+    const closestModal = e.target.closest('.modal');
+    if (closestModal) {
+      closestModal.focus();
+    } else {
+      e.target.blur();
+    }
+    e.stopImmediatePropagation(); // prevents bootstrap modals from closing, but we nee
   }
 
   /**
@@ -708,7 +723,7 @@ class BootstrapDropdownSelect {
           e.preventDefault();
         }
       } else if (e.key === 'Escape') {
-        e.currentTarget.blur();
+        that.escapePressedHandler(e);
       } else if (e.key === 'Backspace' && that.multiple) {
         // delete selected item if multiple are supported
         const val = e.currentTarget.value;
