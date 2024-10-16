@@ -113,7 +113,6 @@ class BootstrapDropdownSelect {
       this.renderOptions();
     }
 
-
     this.loadSelectedOptionFromSrc();
 
     this.src.insertAdjacentElement('afterend', this.trg);
@@ -121,15 +120,18 @@ class BootstrapDropdownSelect {
     this.registerEvents();
     this.reassignLabels();
 
-    this.scrollObserver = new IntersectionObserver((entries) => {
-      // do nothing if spinner is not visible or loading the next page has been triggered (ie this scroll observer was
-      // fired again)
-      if (entries.length === 0 || entries.every(e => !e.isIntersecting) || this.loadNextTriggered) return;
-      this.loadNextPage();
-    }, {
-      root: this.dropdown[0],
-      threshold: 0.1
-    });
+    this.scrollObserver = new IntersectionObserver(
+      entries => {
+        // do nothing if spinner is not visible or loading the next page has been triggered (ie this scroll observer was
+        // fired again)
+        if (entries.length === 0 || entries.every(e => !e.isIntersecting) || this.loadNextTriggered) return;
+        this.loadNextPage();
+      },
+      {
+        root: this.dropdown[0],
+        threshold: 0.1,
+      }
+    );
 
     if (options.url) {
       // spinner should always be in place if we plan to load more. if spinner is visible (user scrolled down far
@@ -241,7 +243,7 @@ class BootstrapDropdownSelect {
     if (optGroup) {
       const group = this.dropdown.querySelector(`.bsddsel-group[data-group='${optGroup}']`);
       if (!group) {
-        receivingElement.appendChild(this.renderOptionGroup({label: optGroup, children: data}));
+        receivingElement.appendChild(this.renderOptionGroup({ label: optGroup, children: data }));
         return;
       }
       receivingElement = group;
@@ -303,7 +305,7 @@ class BootstrapDropdownSelect {
       }
 
       if (filteredChildren.length > 0) {
-        filtered.push({...item, children: filteredChildren});
+        filtered.push({ ...item, children: filteredChildren });
       }
     }
 
@@ -359,7 +361,8 @@ class BootstrapDropdownSelect {
   addSpinner() {
     const spinner = document.createElement('div');
     spinner.classList.add('lds-spinner');
-    spinner.innerHTML = '<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>';
+    spinner.innerHTML =
+      '<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>';
     this.dropdown.appendChild(spinner);
     this.scrollObserver.observe(spinner);
     this.spinner = spinner;
@@ -426,7 +429,7 @@ class BootstrapDropdownSelect {
     if (!srcId || srcId.length === 0) return;
     const inputId = `${srcId}_search`;
     this.input.id = inputId;
-    document.querySelectorAll(`label[for='${srcId}']`).forEach(l => l.htmlFor = inputId);
+    document.querySelectorAll(`label[for='${srcId}']`).forEach(l => (l.htmlFor = inputId));
   }
 
   /**
@@ -440,17 +443,17 @@ class BootstrapDropdownSelect {
     const children = Array.from(this.src.children);
     for (let child of children) {
       if (child.tagName === 'OPTION') {
-        data.push({value: child.value, label: child.label, disabled: !!child.disabled});
+        data.push({ value: child.value, label: child.label, disabled: !!child.disabled });
       } else if (child.tagName === 'OPTGROUP') {
         const children = [];
         for (const optGroupChild of Array.from(child.children)) {
           children.push({
             value: optGroupChild.value,
             label: optGroupChild.label,
-            disabled: !!optGroupChild.disabled
+            disabled: !!optGroupChild.disabled,
           });
         }
-        data.push({label: child.label, children});
+        data.push({ label: child.label, children });
       }
     }
 
@@ -487,10 +490,7 @@ class BootstrapDropdownSelect {
     const value = selectGroupOption.dataset.value;
     const label = selectGroupOption.dataset.label;
 
-    if (
-      this.options.url &&
-      !this.src.querySelector(`option[value="${value}"]`)
-    ) {
+    if (this.options.url && !this.src.querySelector(`option[value="${value}"]`)) {
       // small performance enhancment -- prevent doing $src.find() if no options.url because the presence of options.url
       // implies that our data comes from ajax, so src probably won't have the value we need. the lack of options.url
       // implies our data comes from src itself so src should definitely have it and there's no need to add the option
@@ -510,7 +510,7 @@ class BootstrapDropdownSelect {
 
       this.dropdown.querySelector('.bsddsel-group-option.selected')?.classList.remove('selected');
       selectGroupOption.classList.add('selected');
-      this.src.dispatchEvent(new Event('input', {bubbles: true}));
+      this.src.dispatchEvent(new Event('input', { bubbles: true }));
     }
   }
 
@@ -545,7 +545,7 @@ class BootstrapDropdownSelect {
         this.renderOptions();
       }
     }
-    this.src.dispatchEvent(new Event('input', {bubbles: true}));
+    this.src.dispatchEvent(new Event('input', { bubbles: true }));
   }
 
   /**
@@ -559,7 +559,7 @@ class BootstrapDropdownSelect {
     this.trg.querySelector(`.multiselect-tag[data-value='${value}']`)?.remove();
     this.trg.querySelector(`.bsddsel-group-option[data-value='${value}']`)?.classList.remove('selected');
     if (this.src.selectedOptions.length === 0) this.input.placeholder = this.options.placeholder;
-    this.src.dispatchEvent(new Event('input', {bubbles: true}));
+    this.src.dispatchEvent(new Event('input', { bubbles: true }));
   }
 
   deselectLastMultiselectOption() {
@@ -573,7 +573,7 @@ class BootstrapDropdownSelect {
   clearSelection() {
     if (this.src.value !== '') {
       this.src.value = '';
-      this.src.dispatchEvent(new Event('input', {bubbles: true}));
+      this.src.dispatchEvent(new Event('input', { bubbles: true }));
     }
     this.input.value = '';
     this.dropdown.querySelector('.bsddsel-group-option.selected')?.classList.remove('selected');
@@ -622,7 +622,7 @@ class BootstrapDropdownSelect {
 
   /**
    * called when Escape is pressed in the input or one of the options
-   * @param {KeyboardEvent} e 
+   * @param {KeyboardEvent} e
    */
   escapePressedHandler(e) {
     // if the dropdown is inside a modal, we need to focus the modal so that the next 'Escape' keydown hides the modal
