@@ -613,11 +613,13 @@ class BootstrapDropdownSelect {
     }
   }
 
-  clearSelection() {
+  clearSelection(dispatchEvent = false) {
     if (this.src.value !== '') {
       this.src.value = '';
-      this.src.dispatchEvent(new Event('input', { bubbles: true }));
-      this.src.dispatchEvent(new Event('change', { bubbles: true }));
+      if (dispatchEvent) {
+        this.src.dispatchEvent(new Event('input', { bubbles: true }));
+        this.src.dispatchEvent(new Event('change', { bubbles: true }));
+      }
     }
     this.input.value = '';
     this.dropdown.querySelector('.bsddsel-group-option.selected')?.classList.remove('selected');
@@ -699,7 +701,7 @@ class BootstrapDropdownSelect {
     }
 
     if (e.target.classList.contains('form-control-clear')) {
-      this.clearSelection();
+      this.clearSelection(true);
       this.input.focus();
       if (this.options.url) {
         this.debouncedSearchQueryChanged(null);
