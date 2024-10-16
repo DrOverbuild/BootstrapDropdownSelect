@@ -517,6 +517,45 @@ class BootstrapDropdownSelect {
   }
 
   /**
+   * Updates the value in this.src, the value of the search box, and the selected state of the option in the dropdown if
+   * it has been added. A fallback label is required if the selected option has yet to be loaded from AJAX.
+   * @param {string} val
+   * @param {string?} label
+   */
+  setValue(val, label) {
+    if (this.options.url) {
+      const selectGroupOption = this.trg.querySelector(`.bsddsel-group-option[data-value="${val}"]`);
+      if (selectGroupOption) {
+        this.makeSelection(selectGroupOption);
+        return;
+      }
+
+      /** @type {HTMLOptionElement | undefined} */
+      let srcOption;
+      for (const opt of this.src.options) {
+        if (opt.value === val) {
+          srcOption = opt;
+          break;
+        }
+      }
+
+      if (!srcOption) {
+        srcOption = document.createElement('option');
+        srcOption.value = val;
+        srcOption.label = label;
+        this.src.options.add(srcOption);
+      }
+
+      this.src.value = val;
+      this.loadSelectedOptionFromSrc();
+    }
+  }
+
+  get value() {
+    return this.src.value;
+  }
+
+  /**
    * When multiple items is enabled, this is called to toggle whether an option is selected. If selecting an item, a
    * tag is added to the form control, the option gets the selected class, and the value is added to this.src.val(). If
    * deselecting an item, the tag is removed from the form control, the value removed from $src.val(), and the option
