@@ -502,16 +502,18 @@ class BootstrapDropdownSelect {
 
     if (this.multiple) {
       this.toggleMultiselectOption(selectGroupOption);
-    } else {
-      this.input.value = label;
-      this.src.value = value;
-      this.input.focus();
-      this.closeDropdown();
-
-      this.dropdown.querySelector('.bsddsel-group-option.selected')?.classList.remove('selected');
-      selectGroupOption.classList.add('selected');
-      this.src.dispatchEvent(new Event('input', { bubbles: true }));
+      return;
     }
+
+    this.input.value = label;
+    this.src.value = value;
+    this.input.focus();
+    this.closeDropdown();
+
+    this.dropdown.querySelector('.bsddsel-group-option.selected')?.classList.remove('selected');
+    selectGroupOption.classList.add('selected');
+    this.src.dispatchEvent(new Event('input', { bubbles: true }));
+    this.src.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
   /**
@@ -546,6 +548,7 @@ class BootstrapDropdownSelect {
       }
     }
     this.src.dispatchEvent(new Event('input', { bubbles: true }));
+    this.src.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
   /**
@@ -560,6 +563,7 @@ class BootstrapDropdownSelect {
     this.trg.querySelector(`.bsddsel-group-option[data-value='${value}']`)?.classList.remove('selected');
     if (this.src.selectedOptions.length === 0) this.input.placeholder = this.options.placeholder;
     this.src.dispatchEvent(new Event('input', { bubbles: true }));
+    this.src.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
   deselectLastMultiselectOption() {
@@ -574,6 +578,7 @@ class BootstrapDropdownSelect {
     if (this.src.value !== '') {
       this.src.value = '';
       this.src.dispatchEvent(new Event('input', { bubbles: true }));
+      this.src.dispatchEvent(new Event('change', { bubbles: true }));
     }
     this.input.value = '';
     this.dropdown.querySelector('.bsddsel-group-option.selected')?.classList.remove('selected');
